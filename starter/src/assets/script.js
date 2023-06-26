@@ -100,7 +100,7 @@ function decreaseQuantity(productId) {
 function removeProductFromCart(productId) {
   let product = cart.find((product) => product.productId === productId);
   product.quantity = 0;
-  cart.splice(cart.indexOf(product), 1);
+  cart.splice(0, cart.length);
 }
 
 
