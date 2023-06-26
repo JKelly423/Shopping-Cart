@@ -84,10 +84,16 @@ function increaseQuantity(productId) {
 */
 
 function decreaseQuantity(productId) {
+    // use index so we can edit the object in cart directly
     let product = cart.find((product) => product.productId === productId);
+    let productIndex = cart.indexOf(product);
     product.quantity -= 1;
-    if (product.quantity === 0) {
+    if (product.quantity < 1) {
         removeProductFromCart(productId)
+    } else {
+      // set the object at cart[productIndex] to the updated object
+      // essentially all this does is 'updates' the object by replacing it with a new modified object
+      cart[productIndex] = product
     }
 }
 
@@ -99,8 +105,14 @@ function decreaseQuantity(productId) {
 
 function removeProductFromCart(productId) {
   let product = cart.find((product) => product.productId === productId);
-  product.quantity = 0;
-  cart.splice(0, cart.length);
+  let productIndex = cart.indexOf(product);
+  if (productIndex > -1){
+    // indexOf returns -1 if item not in array
+    // only remove if item in array
+    product.quantity = 0;
+    cart[productIndex] = product;
+    cart.splice(productIndex, 1) // 2nd paramater means remove only one item
+  }
 }
 
 
@@ -121,7 +133,14 @@ function cartTotal() {
 /* Create a function called emptyCart that empties the products from the cart */
 
 function emptyCart() {
-  cart = []
+  // cart = []
+  // Don't do this
+  // cart is a const
+  // do not EVER reassign a const, that is why they are called constants. cus they dont change.
+  // do this instead
+  cart.length = 0;
+  // With a length of 0, every value in the array gets removed, and the array becomes empty.
+  // https://www.freecodecamp.org/news/how-to-clear-a-javascript-array-js-empty-array/
 }
 
 /* Create a function named pay that takes in an amount as an argument
